@@ -1,0 +1,2 @@
+for windows -- run : npm install -g windows.build-tools
+to rebuild the app properly.

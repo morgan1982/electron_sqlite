@@ -1,0 +1,21 @@
+{
+  "name": "pass_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild -f -w sqlite3",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "entropy",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^1.7.9",
+    "knex": "^0.14.0",
+    "sqlite3": "^3.1.13"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^1.6.0"
+  }
+}
