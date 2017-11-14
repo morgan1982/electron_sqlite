@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const url = require('url');
 const path = require('path');
 
+let mainWIndow;
+let addWindow;
 
 let knex = require('knex')({
     client: "sqlite3",
@@ -13,7 +15,7 @@ let knex = require('knex')({
 
 
 app.on("ready", () => {
-    let mainWindow = new BrowserWindow({ height: 800, width: 800, show: false })
+     mainWindow = new BrowserWindow({ height: 800, width: 800, show: false })
     mainWindow.loadURL(`file://${__dirname}/main.html`);
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
@@ -39,13 +41,19 @@ app.on("ready", () => {
     })
 
 
+})//Catch app_name from form and send to main_window
+ipcMain.on('item:appName', (e, item) => {
+    console.log(item);
+    //send to mainwindow
+    mainWindow.webContents.send('item:appName', item);
+    addWindow.close();
 })
 
 //Handle createAddWindow
 function createAddWindow() {
-    let addWindow = new BrowserWindow({
-        width: 200,
-        height: 300,
+     addWindow = new BrowserWindow({
+        width: 600,
+        height: 400,
         title: 'Add new record'
     });
     //load the html file
@@ -66,6 +74,7 @@ const mainMenuTemplate = [
         submenu: [
             {
                 label: 'Add record',
+                accelerator: process.platform == 'darwin' ? 'Command + Shift + A' : 'Ctrl + Shif + a',
                 click() {
                     createAddWindow();
                 }
@@ -83,5 +92,28 @@ const mainMenuTemplate = [
         ]
     }
 ]
+
+//if on mac add empty object to menu
+if(process.platform === 'darwin') {
+    mainMenuTemplate.unshift({});
+}
+//add the dev tools if not in production
+if (process.env.NODE_ENV !== 'production') {
+    mainMenuTemplate.push({
+        label: 'Developer tools',
+        submenu: [
+            {
+                label: 'Toggle dev tools',
+                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+                click(item, focusedWindow) {
+                    focusedWindow.toggleDevTools();
+                }
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    })
+}
 
 app.on("window-all-closed", () => { app.quit() });
