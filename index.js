@@ -42,11 +42,11 @@ app.on("ready", () => {
 
 
 })//Catch app_name from form and send to main_window
-ipcMain.on('item:appName', (e, item) => {
-    console.log(item);
+ipcMain.on('item:cred', (e, item) => {
+    // console.log(item.pass);
     //send to mainwindow
-    mainWindow.webContents.send('item:appName', item);
-    addWindow.close();
+    mainWindow.webContents.send('item:cred', item);
+    // addWindow.close();
 })
 
 //Handle createAddWindow
