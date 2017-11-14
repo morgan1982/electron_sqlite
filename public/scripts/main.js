@@ -9,42 +9,49 @@ document.addEventListener("DOMContentLoaded", function(){
     //         resultEl.innerHTML += "First Name: " + result[i].user.toString() + "<br/>";
     //     }
     // });
-    let ul = document.querySelector("ul");
+});
+
+var ul = document.querySelector("ul");
     
 
-    ipc.on('item:cred', (e, item) => {
+ipc.on('item:cred', (e, item) => {
 
-        let appName = document.createTextNode(item.appName);
-        let userName = document.createTextNode(item.userName);
-        let pass = document.createTextNode(item.pass);
-        let email = document.createTextNode(item.email);
+    let appName = document.createTextNode(item.appName);
+    let userName = document.createTextNode(item.userName);
+    let pass = document.createTextNode(item.pass);
+    let email = document.createTextNode(item.email);
 
-        let items = [
-            {
-                val : appName
-            },
-            {
-                val: userName
-            },
-            {
-                val: pass
-            },
-            {
-                val: email
-            }
-        ]
-        // console.log(items[0].val);
-
-        for (var i=0; i <items.length; i++) {
-            // console.log(items[i].val);
-            let li = document.createElement('li');
-        
-            li.appendChild(items[i].val);
-            ul.appendChild(li);
+    let items = [
+        {
+            val : appName
+        },
+        {
+            val: userName
+        },
+        {
+            val: pass
+        },
+        {
+            val: email
         }
+    ]
+    // console.log(items[0].val);
 
-    })
-    ipc.on('item:clear', (e) => {
-        ul.innerHTMl = '';
-    });
+    for (var i=0; i <items.length; i++) {
+        // console.log(items[i].val);
+        let li = document.createElement('li');
+    
+        li.appendChild(items[i].val);
+        ul.appendChild(li);
+    }
+
+})
+
+ipc.on('item:clear', () => {
+    ul.innerHTMl = '';
 });
+
+ul.addEventListener('dblclick', (e) => {
+    e.target.remove();
+})
+

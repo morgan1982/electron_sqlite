@@ -31,7 +31,7 @@ app.on("ready", () => {
         let result = knex.select("user").from("users")
         result.then(  (rows) => {
             mainWindow.webContents.send("resultSent", rows);
-            console.log(rows);
+            // console.log(rows);
             console.log('promise resolved');
         })
         console.log("promise started");
