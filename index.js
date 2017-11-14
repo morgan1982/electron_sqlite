@@ -80,7 +80,10 @@ const mainMenuTemplate = [
                 }
             },
             {
-                label: 'Delete record'
+                label: 'Delete record',
+                click() {
+                    mainWindow.webContents.send('item:clear');
+                }
             },
             {
                 label: 'Quit',

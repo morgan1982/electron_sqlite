@@ -9,8 +9,10 @@ document.addEventListener("DOMContentLoaded", function(){
     //         resultEl.innerHTML += "First Name: " + result[i].user.toString() + "<br/>";
     //     }
     // });
+    let ul = document.querySelector("ul");
+    
+
     ipc.on('item:cred', (e, item) => {
-        let ul = document.querySelector("ul");
 
         let appName = document.createTextNode(item.appName);
         let userName = document.createTextNode(item.userName);
@@ -42,4 +44,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
     })
+    ipc.on('item:clear', (e) => {
+        ul.innerHTMl = '';
+    });
 });
