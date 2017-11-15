@@ -64,4 +64,20 @@ let add_btn = document.querySelector('#openAdd');
 add_btn.addEventListener('click', (e) => {
     ipc.send('add win');
 })
+let select_btn = document.querySelector('#select');
 
+select_btn.addEventListener('click', () => {
+    let val = document.querySelector('#appName').value;
+    console.log(val);
+    ipc.send('select item', val);
+})
+
+ipc.on('row', (e, row) => {
+    // console.log(row);
+    let name = row[0].name; //emai id name password user
+    let user = row[0].user;
+    let pass = row[0].password;
+    document.querySelector('#name').innerHTML = `app: ${ name }`;
+    document.querySelector('#user').innerHTML = `User: ${ user }`;
+    document.querySelector('#pass').innerHTML = `Pass: ${ pass }`;    
+})

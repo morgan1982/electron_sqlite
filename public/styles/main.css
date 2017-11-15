@@ -5,3 +5,8 @@ body {
 li {
     color: slateblue;
 }
+#appName {
+    margin-top: 10px;
+    margin-left: 1px;
+    width: 100px;
+}

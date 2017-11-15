@@ -44,7 +44,6 @@ app.on("ready", () => {
             // console.log(rows);
             console.log('promise resolved');
         })
-        console.log("promise started");
     })
     mainWindow.on('closed', () => {
         app.quit();
@@ -56,7 +55,21 @@ ipcMain.on('item:cred', (e, item) => {
     // console.log(item.pass);
     console.log(item);
     //send to mainwindow
+    let name = item.appName;
+    let user = item.userName;
+    let password = item.pass;
+    let email = item.email;
+    knex('keychain').insert({
+        name,
+        user,
+        password,
+        email
+    }).then( (rows) => {
+        console.log(`inserted ${ JSON.stringify(rows) }`);
+    })    
+
     mainWindow.webContents.send('item:cred', item);
+
     // addWindow.close();
 })
 
@@ -112,6 +125,20 @@ function createTable () {
 
 
 }
+function queryData(val) {
+    knex('keychain')
+            .where('name', val)
+            .then( (row) => {
+                console.log(row);
+                mainWindow.webContents.send('row', row);
+    
+            })
+}
+ipcMain.on('select item', (e, val) => {
+    // let val = 'udemy'
+    console.log(val);
+    queryData(val);
+})
 
 
 // Menu bar
