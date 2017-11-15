@@ -2,8 +2,12 @@ const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const url = require('url');
 const path = require('path');
 
+
+const { createInsertWindow } = require('./controllers/insert');
 let mainWIndow;
 let addWindow;
+
+
 
 let knex = require('knex')({
     client: "sqlite3",
@@ -15,7 +19,13 @@ let knex = require('knex')({
 
 
 app.on("ready", () => {
-     mainWindow = new BrowserWindow({ height: 800, width: 800, show: false })
+     mainWindow = new BrowserWindow({
+                            height: 400,
+                            width: 600,
+                            show: false,
+                            resizable: false    
+                        })
+
     mainWindow.loadURL(`file://${__dirname}/main.html`);
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
@@ -44,6 +54,7 @@ app.on("ready", () => {
 })//Catch app_name from form and send to main_window
 ipcMain.on('item:cred', (e, item) => {
     // console.log(item.pass);
+    console.log(item);
     //send to mainwindow
     mainWindow.webContents.send('item:cred', item);
     // addWindow.close();
@@ -67,7 +78,20 @@ function createAddWindow() {
         addWindow = null;
     })
 }
+ipcMain.on('add win', () => {
+    createAddWindow();
+})
 
+ipcMain.on('toggle-insert-view', () => {
+    createInsertWindow();
+    // if (!createInsertWindow) {
+    //     createInsertWindow();
+    // }
+    // return (!createInsertWindow.isClosed() && createInsertWindow.isVisible()) ? createInsertWindow.hide() : createInsertWindow.show();
+})
+
+
+// Menu bar
 const mainMenuTemplate = [
     {
         label: 'File',
@@ -83,6 +107,12 @@ const mainMenuTemplate = [
                 label: 'Delete record',
                 click() {
                     mainWindow.webContents.send('item:clear');
+                }
+            },
+            {
+                label: 'Insert Window',
+                click() {
+                    createInsertWindow();
                 }
             },
             {

@@ -54,4 +54,14 @@ ipc.on('item:clear', () => {
 ul.addEventListener('dblclick', (e) => {
     e.target.remove();
 })
+let insert_btn = document.querySelector('#openInsert');
+
+insert_btn.addEventListener('click', (e) => {
+    ipc.send('toggle-insert-view');
+})
+let add_btn = document.querySelector('#openAdd');
+
+add_btn.addEventListener('click', (e) => {
+    ipc.send('add win');
+})
 

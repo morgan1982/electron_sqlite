@@ -1,6 +1,8 @@
 body {
     background-color: rgb(237, 239, 243);
+    -webkit-app-region: drag /* not working. */
 }
 .sub {
     margin-left: 5px;
 }
+
