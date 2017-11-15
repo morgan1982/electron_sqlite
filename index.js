@@ -89,6 +89,29 @@ ipcMain.on('toggle-insert-view', () => {
     // }
     // return (!createInsertWindow.isClosed() && createInsertWindow.isVisible()) ? createInsertWindow.hide() : createInsertWindow.show();
 })
+//databese
+function createTable () {
+
+    console.log('started creation..')
+    let tbl = 'keychain'
+    knex.schema.createTableIfNotExists( tbl, (table) => {
+        table.increments(),
+        table.string('name'),
+        table.string('user'),
+        table.string('password'),
+        table.string('email'),
+        table.timestamps()
+
+
+    }).then( () => {
+        console.log("success");
+    })
+    // knex.select().table('apps').then( (rows) => {
+    //         console.log(rows);
+    // })
+
+
+}
 
 
 // Menu bar
@@ -120,6 +143,17 @@ const mainMenuTemplate = [
                 accelerator: process.platform == 'darwin' ? 'Command + Q' : 'Ctrl + Q',
                 click() {
                     app.quit();
+                }
+            }
+        ]
+    },
+    {
+        label: 'schemas',
+        submenu: [
+            {
+            label: 'create table',
+            click() {
+                createTable();
                 }
             }
         ]
