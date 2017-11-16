@@ -1,5 +1,7 @@
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
+
+
 document.addEventListener("DOMContentLoaded", function(){
     ipc.send("mainWindowLoaded")
     // ipc.on("resultSent", function(evt, result){
@@ -12,6 +14,18 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 var ul = document.querySelector("ul");
+
+// document.getElementById("pass-img").src = "data:image/png;base64," + fetchFav();
+
+ipc.on('byteIcon', (e, item) => {
+    console.log("main.js strem", item);
+    // var decoder = new TextDecoder('utf8');
+    // var b64encoded = btoa(decoder.decode(item));
+    // console.log(b64encoded);
+    // String baseArr = Convert.ToBase64String(item, 0, item.Length);
+    document.getElementById("byte-icon").src = "data:image/png64," + item;
+
+})
     
 
 ipc.on('item:cred', (e, item) => {
@@ -64,18 +78,28 @@ let add_btn = document.querySelector('#openAdd');
 add_btn.addEventListener('click', (e) => {
     ipc.send('add win');
 })
+
+// SELECT COMMAND
 let select_btn = document.querySelector('#select');
 
 select_btn.addEventListener('click', () => {
-    let val = document.querySelector('#appName').value;
+    let elem = document.querySelector('#appName');
+    let val = elem.value;
     console.log(val);
+    // let input = document.getElementById("#appName");
+    // let inputVal = input.getAttribute("value");
+     
     ipc.send('select item', val);
+    elem.value = "";
+
+    
+    
+
 })
 
 ipc.on('row', (e, row) => {
-    console.log(row);
-    // console.log(items);
 
+    // parse the values
     let name = row[0].name;
     let link = row[0].web;
     let user = row[0].user;
@@ -83,19 +107,21 @@ ipc.on('row', (e, row) => {
     let email = row[0].email;
 
     let items = [name, link, user, pass, email]
-    // document.querySelector('#name').innerHTML = `app: ${ name }`;
-    // document.querySelector('#user').innerHTML = `User: ${ user }`;
-    // document.querySelector('#pass').innerHTML = `Pass: ${ pass }`;
     let tableData = document.querySelector("#data");
+
     for (let i=0; i < items.length; i++) {
+
         let tableRow = document.createElement('td');
         let idNode = document.createTextNode(items[i]);
+        
         if (items[i] === items[1]) {
+
             let linkData = document.createElement('a');
             linkData.setAttribute("href", `${ items[i] }`);
             linkData.appendChild(idNode);
             tableRow.appendChild(linkData);
             tableData.appendChild(tableRow);
+
         } else {
             tableRow.appendChild(idNode);
             tableData.appendChild(tableRow);

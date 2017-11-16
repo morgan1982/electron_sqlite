@@ -10,3 +10,18 @@ li {
     margin-left: 1px;
     width: 100px;
 }
+.flex-container {
+    display: flex;
+    align-items: flex-start;
+}
+.pass-img {
+    margin-left: 10px;
+}
+
+/* img {
+    display: inline-block;
+    float: right;
+}
+tlt {
+    display: block;
+} */

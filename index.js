@@ -5,6 +5,9 @@ const path = require('path');
 const { knex } = require('./db/knex_connect');
 const { createInsertWindow } = require('./controllers/insert');
 const { createTable } = require('./db/create_schemas');
+const { fetchFav } = require('./utils/byteIcon');
+const { test } = require('./utils/exportTest');
+
 let mainWIndow;
 let addWindow;
 
@@ -22,6 +25,17 @@ app.on("ready", () => {
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
         console.log('window-loaded');
+
+        let foo = test();
+        console.log("foo", foo);
+
+        fetchFav().then((res) => { // promise!
+            // console.log('res', res);
+            mainWindow.webContents.send("byteIcon", res);
+        }).catch((err) => {
+            console.log(err);
+        })
+        
     })
     //build the menu
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
@@ -70,7 +84,7 @@ ipcMain.on('item:cred', (e, item) => {
 function createAddWindow() {
      addWindow = new BrowserWindow({
         width: 600,
-        height: 400,
+        height: 500,
         title: 'Add new record'
     });
     //load the html file
