@@ -73,11 +73,35 @@ select_btn.addEventListener('click', () => {
 })
 
 ipc.on('row', (e, row) => {
-    // console.log(row);
-    let name = row[0].name; //emai id name password user
+    console.log(row);
+    // console.log(items);
+
+    let name = row[0].name;
+    let link = row[0].web;
     let user = row[0].user;
     let pass = row[0].password;
-    document.querySelector('#name').innerHTML = `app: ${ name }`;
-    document.querySelector('#user').innerHTML = `User: ${ user }`;
-    document.querySelector('#pass').innerHTML = `Pass: ${ pass }`;    
+    let email = row[0].email;
+
+    let items = [name, link, user, pass, email]
+    // document.querySelector('#name').innerHTML = `app: ${ name }`;
+    // document.querySelector('#user').innerHTML = `User: ${ user }`;
+    // document.querySelector('#pass').innerHTML = `Pass: ${ pass }`;
+    let tableData = document.querySelector("#data");
+    for (let i=0; i < items.length; i++) {
+        let tableRow = document.createElement('td');
+        let idNode = document.createTextNode(items[i]);
+        if (items[i] === items[1]) {
+            let linkData = document.createElement('a');
+            linkData.setAttribute("href", `${ items[i] }`);
+            linkData.appendChild(idNode);
+            tableRow.appendChild(linkData);
+            tableData.appendChild(tableRow);
+        } else {
+            tableRow.appendChild(idNode);
+            tableData.appendChild(tableRow);
+        
+            }
+    }
+
+
 })

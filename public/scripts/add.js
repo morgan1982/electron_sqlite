@@ -8,6 +8,7 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const appName = document.querySelector('#app').value;
+    const siteLink = document.querySelector('#site-link').value;    
     const userName = document.querySelector('#user_id').value;
     const pass = document.querySelector('#pass').value;
     const email = document.querySelector('#email').value;
@@ -16,6 +17,7 @@ form.addEventListener('submit', (e) => {
     ipcRenderer.send('item:cred', {
         appName,
         userName,
+        siteLink,
         pass,
         email
      });

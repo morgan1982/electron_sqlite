@@ -2,26 +2,18 @@ const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const url = require('url');
 const path = require('path');
 
-
+const { knex } = require('./db/knex_connect');
 const { createInsertWindow } = require('./controllers/insert');
+const { createTable } = require('./db/create_schemas');
 let mainWIndow;
 let addWindow;
 
 
 
-let knex = require('knex')({
-    client: "sqlite3",
-    connection: {
-        filename: "./passcodes.sqlite"
-    }
-});
-// console.log(knex);
-
-
 app.on("ready", () => {
      mainWindow = new BrowserWindow({
-                            height: 400,
-                            width: 600,
+                            height: 600,
+                            width: 800,
                             show: false,
                             resizable: false    
                         })
@@ -41,8 +33,7 @@ app.on("ready", () => {
         let result = knex.select("user").from("users")
         result.then(  (rows) => {
             mainWindow.webContents.send("resultSent", rows);
-            // console.log(rows);
-            console.log('promise resolved');
+            // console.log('promise resolved');
         })
     })
     mainWindow.on('closed', () => {
@@ -56,11 +47,13 @@ ipcMain.on('item:cred', (e, item) => {
     console.log(item);
     //send to mainwindow
     let name = item.appName;
+    let web = item.siteLink;
     let user = item.userName;
     let password = item.pass;
     let email = item.email;
     knex('keychain').insert({
         name,
+        web,
         user,
         password,
         email
@@ -103,28 +96,7 @@ ipcMain.on('toggle-insert-view', () => {
     // return (!createInsertWindow.isClosed() && createInsertWindow.isVisible()) ? createInsertWindow.hide() : createInsertWindow.show();
 })
 //databese
-function createTable () {
 
-    console.log('started creation..')
-    let tbl = 'keychain'
-    knex.schema.createTableIfNotExists( tbl, (table) => {
-        table.increments(),
-        table.string('name'),
-        table.string('user'),
-        table.string('password'),
-        table.string('email'),
-        table.timestamps()
-
-
-    }).then( () => {
-        console.log("success");
-    })
-    // knex.select().table('apps').then( (rows) => {
-    //         console.log(rows);
-    // })
-
-
-}
 function queryData(val) {
     knex('keychain')
             .where('name', val)
